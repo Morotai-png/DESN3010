@@ -1,0 +1,336 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+  /*========== Colors ==========*/
+  /*Color mode HSL(hue, saturation, lightness)*/
+  --white-color: hsl(0, 0%, 100%);
+  --black-color: hsl(0, 0%, 0%);
+
+  /*========== Font and typography ==========*/
+  /*.5rem = 8px | 1rem = 16px ...*/
+  --body-font: "Poppins", sans-serif;
+  --h1-font-size: 2rem;
+  --normal-font-size: 1rem;
+  --small-font-size: .813rem;
+}
+
+/*=============== BASE ===============*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body,
+input,
+button {
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/*=============== screen-container ===============*/
+.screen-container {
+  position: relative;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+}
+
+.hidden-screen {
+  display: none !important;
+}
+
+.screen-container__bg {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+.screen-container__form {
+  position: relative;
+  margin-inline: 1.5rem;
+  background-color: hsla(0, 0%, 100%, .01);
+  border: 2px solid hsla(0, 0%, 100%, .7);
+  padding: 2.5rem 1rem;
+  color: var(--white-color);
+  border-radius: 1rem;
+  backdrop-filter: blur(16px);
+}
+
+.screen-container__title {
+  color: var(--white-color);
+  text-align: center;
+  font-size: var(--h1-font-size);
+  margin-bottom: 1.25rem;
+}
+
+.screen-container__text {
+  color: var(--white-color);
+  text-align: center;
+  font-size: var(--normal-font-size);
+  margin-bottom: 1.25rem;
+}
+.screen-container__inputs,
+.screen-container__box {
+  display: grid;
+}
+
+.screen-container__inputs {
+  row-gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.screen-container__box {
+  grid-template-columns: 1fr max-content;
+  column-gap: .75rem;
+  align-items: center;
+  border: 2px solid hsla(0, 0%, 100%, .7);
+  padding-inline: 1.25rem;
+  border-radius: 4rem;
+}
+
+.screen-container__input,
+.screen-container__button {
+  border: none;
+  outline: none;
+}
+
+.screen-container__input {
+  width: 100%;
+  background: none;
+  color: var(--white-color);
+  padding-block: 1rem;
+}
+
+.screen-container__input::placeholder {
+  color: var(--white-color);
+}
+
+.screen-container__box i {
+  font-size: 1.25rem;
+}
+
+.screen-container__check,
+.screen-container__check-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.screen-container__check {
+  margin-bottom: 1rem;
+  font-size: var(--small-font-size);
+}
+
+.screen-container__check-box {
+  column-gap: .5rem;
+}
+
+.screen-container__check-input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--white-color);
+}
+
+
+.screen-container__button {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: var(--white-color);
+  border-radius: 4rem;
+  color: var(--black-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.loading_screen_title {
+    color: white;
+    text-align: center;
+    font-size: var(--h1-font-size);
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 2;
+  }
+
+.loading_screen_text {
+  color: white;
+  text-align: center;
+  font-size: var(--p-font-size);
+  margin-bottom: 1.25rem;
+}
+
+/*=============== BREAKPOINTS ===============*/
+/* For medium devices */
+@media screen and (min-width: 576px) {
+  .screen-container {
+    justify-content: center;
+  }
+  .screen-container__form {
+    width: 420px;
+    padding-inline: 2.5rem;
+  }
+  .screen-container__title {
+    margin-bottom: 2rem;
+  }
+}
+
+
+/*===============LOADING=============*/
+#loading-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#finish-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/*=========== Receipt ============*/
+/* Keep receipt off screen normally */
+#receipt {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+}
+
+/* PRINT SETTINGS */
+@media print {
+
+    html,
+    body {
+        width: 58mm;
+        margin: 0;
+        padding: 0;
+        background: white !important;
+    }
+
+    @page {
+        size: 58mm auto;
+        margin: 0;
+    }
+
+    /* hide EVERYTHING */
+    body * {
+        display: none !important;
+    }
+
+    /* show receipt only */
+    #receipt,
+    #receipt * {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    #receipt {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 58mm;
+    }
+
+    /* remove images/backgrounds */
+    img,
+    .screen-container__bg {
+        display: none !important;
+    }
+
+    h2,
+    p,
+    span {
+        color: black !important;
+    }
+
+    .screen-container {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+
+.receipt_container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.receipt {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #080808;
+    border-radius: 5px;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    text-align: left;
+}
+.no-date {
+    text-align: left;
+    margin-left: auto;
+    width: 140px;
+
+}
+.from-amount {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.by {
+    width: 100%;
+    text-align: right;
+}
+.receipt h2 {
+    text-align: center;
+}
+.receipt p {
+    margin: 5px 0;
+
+}
+.receipt p span {
+    border-bottom: 1px solid #080808;
+    width: auto;
+}
+
+/* Print styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .receipt, .receipt * {
+        visibility: visible;
+    }
+    .receipt {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+}

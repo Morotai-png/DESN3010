@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Gradshow Sign In</title>
+
+</head>
+<body>
+    <div class="screen-container">
+        <img src="img/black.jpg" alt="image" class="screen-container__bg" id="background_img">
+        <div id="login_screen">
+            <form id="login_form" class="screen-container__form" action="">
+                <h1 class="screen-container__title">Welcome!</h1>
+                <p class="screen-container__text">Please sign in</p>
+                <div class="screen-container__inputs">
+                    <div class="screen-container__box">
+                        <input type="fname" id="fname" placeholder="First Name" required class="screen-container__input">
+                    </div>
+
+                    <div class="screen-container__box">
+                        <input type="lname" id="lname" placeholder="Last Name" required class="screen-container__input">
+                    </div>
+                    <div class="screen-container__box">
+                        <input type="email" id="email" placeholder="Email Address" required class="screen-container__input">
+                    </div>
+                </div>
+                <button type="submit" class="screen-container__button">Sign In</button>
+
+            </form>
+        </div>
+        <div id="blank-page" class="hidden-screen"> </div>
+
+        <div id="loading-page" class="hidden-screen">
+            <h1 class="loading_screen_title">Printing Ticket</h1>
+            <p class="loading_screen_text">Please wait...</p>
+        </div>
+
+        <div id="finish-page" class="hidden-screen">
+            <h1 class="loading_screen_title">Thank you!</h1>
+            <p class="loading_screen_text">Please take your receipt.</p>
+        </div>
+    </div>
+    <div id="receipt" class="hidden-screen">
+        <p><span id="r_date"></span></p>
+
+        <p>Name: <span id="r_name"></span></p>
+        <p>Email: <span id="r_email"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const login = document.querySelector("form");
+    const login_screen = document.querySelector("#login_screen");
+    const loading_screen = document.querySelector("#loading-page");
+    const blank_screen = document.querySelector("#blank-page");
+    const finish_page = document.querySelector("#finish-page");
+    const background_img = document.getElementById('background_img');
+
+    // Retrieve form values
+    // const receiptNo = document.getElementById('receiptNo').value;
+    var currentdate = new Date();
+    var dateTime = '';
+
+    // const amount = document.getElementById('amount').value;
+    // const from = document.getElementById('from').value;
+    // const paymentFor = document.getElementById('paymentFor').value;
+    // const receivedBy = document.getElementById('receivedBy').value;
+
+    let fname = 0;
+    let lname = 0;
+    let email = 0;
+    login.addEventListener("submit", (e)=>{
+       e.preventDefault();
+       console.log("Form Submitted");
+     fname = document.querySelector("#fname").value;
+       console.log(fname);
+       lname = document.querySelector("#lname").value;
+       console.log(lname);
+       email = document.querySelector("#email").value;
+       console.log(email);
+
+       login_screen.classList.add('hidden-screen');
+       login_screen.classList.remove('screen-container');
+
+       blank_screen.classList.remove('hidden-screen');
+       blank_screen.classList.add('screen-container');
+
+       changeImage();
+       setTimeout(function(){
+          changeImage();
+       }, 80);
+
+       setTimeout(function(){
+       blank_screen.classList.add('hidden-screen');
+       blank_screen.classList.remove('screen-container');
+       }, 500);
+
+       loading_screen.classList.remove('hidden-screen');
+       loading_screen.classList.add('screen-container');
+
+        const date = new Date();
+      const options = {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
+
+      const dateDisplay = date.toLocaleString("en-GB", options);
+      const fullName = `${fname} ${lname}`;
+
+      const receiptText = [
+        dateDisplay,
+        "",
+        "Thank you!",
+        "",
+        `Name: ${fullName}`,
+        `Email: ${email}`,
+        "",
+        "----------------------",
+        "",
+        "",
+        "",
+      ].join("\n");
+
+      const receiptData = {
+        fname,
+        lname,
+        email,
+        fullName,
+        dateDisplay,
+      };
+
+       printReceipt(receiptData);
+
+        function onNativePrintSuccess() {
+        showFinish();
+        }
+       setTimeout(function(){
+       loading_screen.classList.add('hidden-screen');
+       loading_screen.classList.remove('screen-container');
+       }, 10000);
+
+       finish_page.classList.remove('hidden-screen');
+       finish_page.classList.add('screen-container');
+
+       setTimeout(function() {
+          document.getElementById("login_form").reset();
+          console.log("form reset");
+          finish_page.classList.remove('screen-container');
+          finish_page.classList.add('hidden-screen');
+
+          login_screen.classList.remove('hidden-screen');
+          login_screen.classList.add('screen-container');
+       }, 11000);
+
+    })
+
+    function changeImage() {
+       if ((background_img.src).endsWith("black.jpg")) {
+          console.log("showing eyeball");
+          background_img.src = "img/eyeball.jpg"
+       } else {
+          background_img.src = 'img/black.jpg'
+          console.log("showing black");
+       }
+    }
+
+
+  function printReceipt(receiptData) {
+
+  if (
+    window.AndroidPrinter &&
+    typeof window.AndroidPrinter.printReceipt === "function"
+  ) {
+    AndroidPrinter.printReceipt(JSON.stringify(receiptData));
+  } else {
+    console.warn("AndroidPrinter bridge not found. Falling back to window.print().");
+    window.print();
+  }
+}
+
+    function onNativePrintSuccess() {
+  loading_screen.classList.add("hidden-screen");
+  finish_page.classList.remove("hidden-screen");
+
+  setTimeout(function () {
+    document.getElementById("login_form").reset();
+
+    finish_page.classList.add("hidden-screen");
+    login_screen.classList.remove("hidden-screen");
+  }, 3000);
+}
+
+</script>
+
+</html>
