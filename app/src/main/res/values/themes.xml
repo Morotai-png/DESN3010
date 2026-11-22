@@ -3,7 +3,9 @@
     <style name="Base.Theme.DESN3010" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.DESN3010" parent="Base.Theme.DESN3010" />
+
 </resources>

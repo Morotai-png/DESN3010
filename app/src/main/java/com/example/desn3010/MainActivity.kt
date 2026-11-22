@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowInsetsController
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -18,6 +20,9 @@ import androidx.core.content.ContextCompat
 import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         webView = WebView(this)
         setContentView(webView)
 
+        hideSystemControls()
+        hideSystemUI()
+
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = WebViewClient()
 
@@ -43,6 +51,27 @@ class MainActivity : AppCompatActivity() {
         )
 
         webView.loadUrl("file:///android_asset/main.html")
+    }
+    private fun hideSystemUI() {
+         @Suppress("DEPRECATION")
+         window.decorView.systemUiVisibility = (
+                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                         or View.SYSTEM_UI_FLAG_FULLSCREEN
+                 )
+     }
+    private fun hideSystemControls() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
+
+        controller.hide(WindowInsetsCompat.Type.systemBars())
     }
 
     private fun requestBluetoothPermissionIfNeeded() {
@@ -268,6 +297,7 @@ class MainActivity : AppCompatActivity() {
             append("[C]$dateDisplay\n")
             append("[C]<b><font size='big'>THANK YOU</font></b>\n")
             append("[C]<b><font color='bg-black'>for giving us your data :)</font></b>\n")
+            append("[C]<b>We sold it to data brokers!</font></b>\n")
             append("[C]--------------------------------\n")
             append("[C]<img>")
             append(logoHex)
